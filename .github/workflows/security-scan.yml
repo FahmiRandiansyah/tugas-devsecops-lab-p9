@@ -1,4 +1,4 @@
-kname: Container Security Scan
+name: Container Security Scan
 
 on:
   push:
@@ -6,7 +6,6 @@ on:
   pull_request:
     branches: [ "main" ]
 
-# ✅ KUNCI UTAMA: Beri izin eksplisit untuk menulis ke tab Security
 permissions:
   contents: read
   security-events: write
@@ -32,12 +31,11 @@ jobs:
           format: "sarif"
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"
-          # ✅ Kita set "0" (Soft Fail) dulu agar pipeline HIJAU dan bisa upload SARIF
-          exit-code: "0" 
+          exit-code: "0"
 
       - name: Upload Trivy scan results to GitHub Security
         uses: github/codeql-action/upload-sarif@v3
-        if: always() # Selalu upload, meskipun step sebelumnya gagal
+        if: always()
         with:
           sarif_file: "trivy-results.sarif"
           category: "container-scanning"
